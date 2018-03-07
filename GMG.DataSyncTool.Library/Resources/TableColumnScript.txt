@@ -1,0 +1,13 @@
+SELECT
+  TABLE_CATALOG            AS CatalogName,
+  TABLE_SCHEMA             AS SchemaName,
+  TABLE_NAME               AS TableName,
+  COLUMN_NAME              AS ColumnName,
+  ORDINAL_POSITION         AS Position,
+  COLUMN_DEFAULT           AS ColumnDefault,
+  IS_NULLABLE              AS IsNullable,
+  DATA_TYPE                AS DataType,
+  CHARACTER_MAXIMUM_LENGTH AS MaxCharacterLength,
+  NUMERIC_PRECISION        AS NumericPrecision
+FROM
+  INFORMATION_SCHEMA.COLUMNS 
