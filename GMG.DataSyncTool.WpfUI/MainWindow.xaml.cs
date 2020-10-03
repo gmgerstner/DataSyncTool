@@ -1,4 +1,5 @@
 ﻿using GMG.DataSyncTool.Library;
+using Microsoft.Win32;
 using System.Windows;
 
 namespace GMG.DataSyncTool.WpfUI
@@ -44,7 +45,15 @@ namespace GMG.DataSyncTool.WpfUI
             using (Synchronizer sync = new Synchronizer(SourceConnectionString, TargetConnectionString))
             {
                 sql = sync.GenerateScript();
-                //todo save to file
+                var dlg = new SaveFileDialog();
+                dlg.DefaultExt = ".sql";
+                dlg.Title = "Save SQL File";
+                dlg.Filter = "SQL Files (*.sql)|*.sql|All Files (*.*)|*.*";
+                if (dlg.ShowDialog(this) ?? false)
+                {
+                    var filename = dlg.FileName;
+                    System.IO.File.WriteAllText(filename, sql);
+                }
             }
         }
 
