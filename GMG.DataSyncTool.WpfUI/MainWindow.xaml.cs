@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GMG.DataSyncTool.Library;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace GMG.DataSyncTool.WpfUI
 {
@@ -52,12 +40,17 @@ namespace GMG.DataSyncTool.WpfUI
 
         private void GenerateButton_Click(object sender, RoutedEventArgs e)
         {
-
+            string sql = "";
+            using (Synchronizer sync = new Synchronizer(SourceConnectionString, TargetConnectionString))
+            {
+                sql = sync.GenerateScript();
+                //todo save to file
+            }
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
         }
     }
 }
