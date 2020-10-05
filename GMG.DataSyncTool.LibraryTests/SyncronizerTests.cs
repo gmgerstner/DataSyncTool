@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GMG.DataSyncTool.Library;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace GMG.DataSyncTool.Library.Tests
 {
     [TestClass()]
@@ -15,8 +9,8 @@ namespace GMG.DataSyncTool.Library.Tests
         {
             string sql = "";
             using (Synchronizer sync = new Synchronizer(
-                 "Password=fre$hLake27;Persist Security Info=True;User ID=sa;Initial Catalog=USADB;Data Source=sql.hallmarkstevedoring.com",
-                 "Password=fre$hLake27;Persist Security Info=True;User ID=sa;Initial Catalog=USADB_STAGE;Data Source=sql.hallmarkstevedoring.com"
+                 "Data Source=FTWI1-MSSQL1\\TEST;Initial Catalog=FormFoxTestLang;Integrated Security=true;Pooling=False;Persist Security Info=True;",
+                 "Data Source=(local);Initial Catalog=FormFox;Integrated Security=true;Pooling=False;Persist Security Info=True;"
                  ))
             {
                 sql = sync.GenerateScript();

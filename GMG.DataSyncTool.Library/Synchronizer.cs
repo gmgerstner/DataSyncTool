@@ -39,6 +39,8 @@ namespace GMG.DataSyncTool.Library
             //Delete extra rows
             foreach (var table in destinationTables.OrderByDescending(t => t.Level))
             {
+                if (table.PrimaryKeys.Count == 0) continue;
+
                 sb.AppendFormat("DELETE FROM [{0}].[{1}] \r\n", table.SchemaName, table.TableName);
                 sb.AppendFormat("FROM   [{0}].[{1}] \r\n", table.SchemaName, table.TableName);
                 sb.AppendFormat("       LEFT OUTER JOIN [{2}].[{0}].[{1}] AS Source \r\n", table.SchemaName, table.TableName, SourceContext.Database.Connection.Database);
@@ -53,6 +55,8 @@ namespace GMG.DataSyncTool.Library
             //Update differences in rows
             foreach (var table in destinationTables.OrderByDescending(t => t.Level))
             {
+                if (table.PrimaryKeys.Count == 0) continue;
+
                 var pkCols = from col in table.Columns
                              join pk in table.PrimaryKeys on col.ColumnName equals pk.ColumnName
                              select col;
@@ -112,6 +116,8 @@ namespace GMG.DataSyncTool.Library
             //Insert missing rows
             foreach (var table in destinationTables.OrderBy(t => t.Level))
             {
+                if (table.PrimaryKeys.Count == 0) continue;
+
                 //var identities = from col in table.Columns
                 //                 join pk in table.PrimaryKeys on col.ColumnName equals pk.ColumnName
                 //                 where pk.IsIdentity == 1
