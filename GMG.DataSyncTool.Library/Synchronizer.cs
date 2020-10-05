@@ -92,32 +92,42 @@ namespace GMG.DataSyncTool.Library
                     {
                         case "bit":
                         case "decimal":
+                        case "money":
+                        case "float":
+                        case "real":
                         case "int":
+                        case "bigint":
+                        case "smallint":
+                        case "smalldatetime":
                         case "datetime":
-                            sb.AppendFormat("    {1}(Target.[{0}] <> Source.[{0}])  \r\n", table.Columns[0].ColumnName, firstColUsed ? "" : "OR ");
+                        case "date":
+                        case "geography": //does this one work
+                            sb.AppendFormat("    {1}(Target.[{0}] <> Source.[{0}])  \r\n", table.Columns[0].ColumnName, !firstColUsed ? "" : "OR ");
                             firstColUsed = true;
                             break;
 
                         case "char":
+                        case "nchar":
                         case "varchar":
                         case "nvarchar":
                         case "ntext":
-                            sb.AppendFormat("    {1}(Isnull(CONVERT(VARCHAR(max), Target.[{0}]), 'NULL') <> Isnull(CONVERT(VARCHAR(max), Source.[{0}]), 'NULL'))  \r\n", table.Columns[0].ColumnName, firstColUsed ? "" : "OR ");
+                            sb.AppendFormat("    {1}(Isnull(CONVERT(VARCHAR(max), Target.[{0}]), 'NULL') <> Isnull(CONVERT(VARCHAR(max), Source.[{0}]), 'NULL'))  \r\n", table.Columns[0].ColumnName, !firstColUsed ? "" : "OR ");
                             firstColUsed = true;
                             break;
 
+                        case "varbinary"://does this one work?
                         case "image":
-                            sb.AppendFormat("    {1}(Target.[{0}] <> Source.[{0}])  \r\n", table.Columns[0].ColumnName, firstColUsed ? "" : "OR ");
+                            sb.AppendFormat("    {1}(Target.[{0}] <> Source.[{0}])  \r\n", table.Columns[0].ColumnName, !firstColUsed ? "" : "OR ");
                             firstColUsed = true;
                             break;
 
                         case "uniqueidentifier":
-                            sb.AppendFormat("    {1}(Target.[{0}] <> Source.[{0}])  \r\n", table.Columns[0].ColumnName, firstColUsed ? "" : "OR ");
+                            sb.AppendFormat("    {1}(Target.[{0}] <> Source.[{0}])  \r\n", table.Columns[0].ColumnName, !firstColUsed ? "" : "OR ");
                             firstColUsed = true;
                             break;
 
                         default:
-                            sb.AppendFormat("    {1}(Target.[{0}] <> Source.[{0}])  \r\n", table.Columns[0].ColumnName, firstColUsed ? "" : "OR ");
+                            sb.AppendFormat("    {1}(Target.[{0}] <> Source.[{0}])  \r\n", table.Columns[0].ColumnName, !firstColUsed ? "" : "OR ");
                             firstColUsed = true;
                             break;
                     }
