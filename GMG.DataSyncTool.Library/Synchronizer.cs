@@ -40,6 +40,8 @@ namespace GMG.DataSyncTool.Library
             {
                 if (table.PrimaryKeys.Count == 0) continue;
 
+                sb.AppendFormat("PRINT 'Deleting extra rows from {0}' \r\n", table.SchemaName);
+
                 sb.AppendFormat("DELETE FROM [{0}].[{1}] \r\n", table.SchemaName, table.TableName);
                 sb.AppendFormat("FROM   [{0}].[{1}] \r\n", table.SchemaName, table.TableName);
                 sb.AppendFormat("       LEFT OUTER JOIN [{2}].[{0}].[{1}] AS Source \r\n", table.SchemaName, table.TableName, SourceContext.Database.Connection.Database);
@@ -65,6 +67,8 @@ namespace GMG.DataSyncTool.Library
                 {
                     continue;
                 }
+
+                sb.AppendFormat("PRINT 'Update differences in rows for {0}' \r\n", table.SchemaName);
 
                 sb.AppendFormat("UPDATE [{0}].[{1}]  \r\n", table.SchemaName, table.TableName);
                 sb.AppendFormat("SET  \r\n");
@@ -131,6 +135,8 @@ namespace GMG.DataSyncTool.Library
                 //                 select col;
                 //var insertableColumns = table.Columns.Except(identities);
                 var insertableColumns = table.Columns;
+
+                sb.AppendFormat("PRINT 'Insert missing rows for {0}' \r\n", table.SchemaName);
 
                 if (table.PrimaryKeys.Where(pk => pk.IsIdentity == 1).Any())
                     sb.AppendFormat("SET IDENTITY_INSERT [{0}].[{1}] ON \r\n", table.SchemaName, table.TableName);
