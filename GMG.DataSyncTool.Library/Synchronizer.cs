@@ -40,7 +40,7 @@ namespace GMG.DataSyncTool.Library
             {
                 if (table.PrimaryKeys.Count == 0) continue;
 
-                sb.AppendFormat("PRINT 'Deleting extra rows from {0}' \r\n", table.SchemaName);
+                sb.AppendFormat("PRINT 'Deleting extra rows from [{0}].[{1}]' \r\n", table.SchemaName, table.TableName);
 
                 sb.AppendFormat("DELETE FROM [{0}].[{1}] \r\n", table.SchemaName, table.TableName);
                 sb.AppendFormat("FROM   [{0}].[{1}] \r\n", table.SchemaName, table.TableName);
@@ -68,7 +68,7 @@ namespace GMG.DataSyncTool.Library
                     continue;
                 }
 
-                sb.AppendFormat("PRINT 'Update differences in rows for {0}' \r\n", table.SchemaName);
+                sb.AppendFormat("PRINT 'Update differences in rows for [{0}].[{1}]' \r\n", table.SchemaName, table.TableName);
 
                 sb.AppendFormat("UPDATE [{0}].[{1}]  \r\n", table.SchemaName, table.TableName);
                 sb.AppendFormat("SET  \r\n");
@@ -102,7 +102,7 @@ namespace GMG.DataSyncTool.Library
                         case "datetime":
                         case "date":
                         case "geography": //does this one work
-                            sb.AppendFormat("    {1}(Target.[{0}] <> Source.[{0}])  \r\n", table.Columns[0].ColumnName, !firstColUsed ? "" : "OR ");
+                            sb.AppendFormat("    {1}(Target.[{0}] <> Source.[{0}])  \r\n", table.Columns[i].ColumnName, !firstColUsed ? "" : "OR ");
                             firstColUsed = true;
                             break;
 
@@ -111,23 +111,23 @@ namespace GMG.DataSyncTool.Library
                         case "varchar":
                         case "nvarchar":
                         case "ntext":
-                            sb.AppendFormat("    {1}(Isnull(CONVERT(VARCHAR(max), Target.[{0}]), 'NULL') <> Isnull(CONVERT(VARCHAR(max), Source.[{0}]), 'NULL'))  \r\n", table.Columns[0].ColumnName, !firstColUsed ? "" : "OR ");
+                            sb.AppendFormat("    {1}(Isnull(CONVERT(VARCHAR(max), Target.[{0}]), 'NULL') <> Isnull(CONVERT(VARCHAR(max), Source.[{0}]), 'NULL'))  \r\n", table.Columns[i].ColumnName, !firstColUsed ? "" : "OR ");
                             firstColUsed = true;
                             break;
 
                         case "varbinary"://does this one work?
                         case "image":
-                            sb.AppendFormat("    {1}(Target.[{0}] <> Source.[{0}])  \r\n", table.Columns[0].ColumnName, !firstColUsed ? "" : "OR ");
+                            sb.AppendFormat("    {1}(Target.[{0}] <> Source.[{0}])  \r\n", table.Columns[i].ColumnName, !firstColUsed ? "" : "OR ");
                             firstColUsed = true;
                             break;
 
                         case "uniqueidentifier":
-                            sb.AppendFormat("    {1}(Target.[{0}] <> Source.[{0}])  \r\n", table.Columns[0].ColumnName, !firstColUsed ? "" : "OR ");
+                            sb.AppendFormat("    {1}(Target.[{0}] <> Source.[{0}])  \r\n", table.Columns[i].ColumnName, !firstColUsed ? "" : "OR ");
                             firstColUsed = true;
                             break;
 
                         default:
-                            sb.AppendFormat("    {1}(Target.[{0}] <> Source.[{0}])  \r\n", table.Columns[0].ColumnName, !firstColUsed ? "" : "OR ");
+                            sb.AppendFormat("    {1}(Target.[{0}] <> Source.[{0}])  \r\n", table.Columns[i].ColumnName, !firstColUsed ? "" : "OR ");
                             firstColUsed = true;
                             break;
                     }
@@ -146,7 +146,7 @@ namespace GMG.DataSyncTool.Library
                 //var insertableColumns = table.Columns.Except(identities);
                 var insertableColumns = table.Columns;
 
-                sb.AppendFormat("PRINT 'Insert missing rows for {0}' \r\n", table.SchemaName);
+                sb.AppendFormat("PRINT 'Insert missing rows for [{0}].[{1}]' \r\n", table.SchemaName, table.TableName);
 
                 if (table.PrimaryKeys.Where(pk => pk.IsIdentity == 1).Any())
                     sb.AppendFormat("SET IDENTITY_INSERT [{0}].[{1}] ON \r\n", table.SchemaName, table.TableName);
